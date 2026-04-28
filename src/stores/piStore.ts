@@ -30,6 +30,10 @@ export interface PIData {
   netWeight: number       // 总净重(kg)
   supervisionMode: string
   taxExemption: string
+  // 报关单人民币金额（与货代确认后手动输入）
+  customsDeclarationAmountCNY?: number
+  // 币种
+  currency?: string
 }
 
 type ExtractionStatus = 'idle' | 'extracting' | 'success' | 'error'
@@ -54,7 +58,7 @@ export const defaultPIData: PIData = {
   clientNameEN: 'KONJULBAKI-TRADELAB',
   clientAddressCN: '',
   clientAddressEN: 'Seoul, South Korea',
-  tradeTerms: 'EXW',
+  tradeTerms: 'CIF',
   transportMode: '航空运输',
   tradeCountry: '韩国',
   destinationCountry: '韩国',
@@ -70,6 +74,8 @@ export const defaultPIData: PIData = {
   netWeight: 8.94,
   supervisionMode: '一般贸易',
   taxExemption: '一般征税',
+  customsDeclarationAmountCNY: undefined,
+  currency: 'USD',
 }
 
 export const usePIStore = create<PIStore>((set) => ({

@@ -166,7 +166,8 @@ function useDocData() {
     originCountry: '中国',
     inlandSource: '广州其他',
     taxType: '照章征税',
-    currency: 'USD',
+    currency: pi?.currency || 'USD',
+    customsDeclarationAmountCNY: pi?.customsDeclarationAmountCNY,
     unitPrice: pi?.unitPrice ?? 0,
   }
 }
@@ -620,7 +621,7 @@ function CustomsDeclarationPreview({ data }: { data: ReturnType<typeof useDocDat
           <span className="font-medium">{data.buyerName}</span>
         </div>
         <div>
-          <span className="text-[#5A6270]">运输方式: </span>
+          <span className="text-[#5A6270]">首段运输方式: </span>
           <span className="font-medium">{data.transportMode}</span>
         </div>
         <div className="col-span-2">
@@ -679,6 +680,12 @@ function CustomsDeclarationPreview({ data }: { data: ReturnType<typeof useDocDat
           <span className="text-[#5A6270]">净重(千克): </span>
           <span className="font-medium">{data.totalNet.toFixed(2)}</span>
         </div>
+        <div className="col-span-3">
+          <span className="text-[#5A6270]">人民币报关金额: </span>
+          <span className="font-medium text-[#4F46E5]">
+            {data.customsDeclarationAmountCNY ? `¥${data.customsDeclarationAmountCNY}` : '未填写'}
+          </span>
+        </div>
       </div>
 
       {/* Items Table */}
@@ -689,7 +696,9 @@ function CustomsDeclarationPreview({ data }: { data: ReturnType<typeof useDocDat
             <th className="border border-black px-1 py-1.5 w-14">商品编号</th>
             <th className="border border-black px-1 py-1.5 w-28">商品名称</th>
             <th className="border border-black px-1 py-1.5 w-36">规格型号</th>
-            <th className="border border-black px-1 py-1.5 w-16">数量及单位</th>
+            <th className="border border-black px-1 py-1.5 w-10">数量</th>
+            <th className="border border-black px-1 py-1.5 w-8">单位</th>
+            <th className="border border-black px-1 py-1.5 w-10">千克</th>
             <th className="border border-black px-1 py-1.5 w-14">单价</th>
             <th className="border border-black px-1 py-1.5 w-14">总价</th>
             <th className="border border-black px-1 py-1.5 w-8">币制</th>
@@ -708,7 +717,9 @@ function CustomsDeclarationPreview({ data }: { data: ReturnType<typeof useDocDat
               <td className="border border-black px-1 py-1 text-[10px] leading-tight">
                 {item.declarationElements}
               </td>
-              <td className="border border-black px-1 py-1 text-center">{item.totalQty}个</td>
+              <td className="border border-black px-1 py-1 text-center">{item.totalQty}</td>
+              <td className="border border-black px-1 py-1 text-center">个</td>
+              <td className="border border-black px-1 py-1 text-right font-mono">{item.netWeightKg}</td>
               <td className="border border-black px-1 py-1 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
               <td className="border border-black px-1 py-1 text-right font-mono">{item.totalPrice.toFixed(2)}</td>
               <td className="border border-black px-1 py-1 text-center">{data.currency}</td>
@@ -802,6 +813,7 @@ export default function DocPreview() {
       destinationPort: data.destinationPort,
       quantity: data.quantity,
       unitPrice: data.unitPrice,
+      customsDeclarationAmountCNY: data.customsDeclarationAmountCNY,
       cartons: data.cartons,
       totalCartons: data.totalCartons,
       totalCartonGross: data.totalCartonGross,
@@ -929,11 +941,27 @@ export default function DocPreview() {
         transition={{ duration: 0.3, delay: 0.2 }}
         className="jt-card px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
       >
-        <span className="text-sm text-[#5A6270]">
-          当前文档: <span className="font-medium text-[#1A1D23]">
-            {tabs.find((t) => t.key === activeTab)?.label}
+        <div className="flex items-center gap-4 flex-wrap">
+          <span className="text-sm text-[#5A6270]">
+            当前文档: <span className="font-medium text-[#1A1D23]">
+              {tabs.find((t) => t.key === activeTab)?.label}
+            </span>
           </span>
-        </span>
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-[#5A6270]">人民币报关金额:</label>
+            <input
+              type="number"
+              placeholder="与货代确认后输入"
+              value={piStore.uploadedPI?.customsDeclarationAmountCNY || ''}
+              onChange={(e) => {
+                const val = e.target.value === '' ? undefined : Number(e.target.value)
+                piStore.updatePI({ customsDeclarationAmountCNY: val })
+              }}
+              className="w-40 h-8 rounded-md border border-[#E2E5E9] bg-white px-2.5 text-xs text-[#1A1D23] focus:border-[#2563EB] focus:ring-[3px] focus:ring-[#BFDBFE]/50 outline-none transition-all"
+            />
+            <span className="text-xs text-[#8F96A3]">CNY</span>
+          </div>
+        </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleExportSingle}

@@ -59,7 +59,7 @@ const SYSTEM_PROMPT = `你是一位专业的国际贸易单证解析专家。用
   "clientNameCN": "客户中文名称（如有）",
   "clientAddressEN": "客户英文地址",
   "clientAddressCN": "客户中文地址（如有）",
-  "tradeTerms": "交易条件 (EXW/FOB/CIF/CFR/DAP/DDP等)",
+  "tradeTerms": "交易条件 (CIF/EXW/FOB/CFR/DAP/DDP等，如未明确默认为CIF)",
   "transportMode": "运输方式",
   "tradeCountry": "贸易国",
   "destinationCountry": "运抵国",

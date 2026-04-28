@@ -35,17 +35,16 @@ function buildCommercialInvoiceSheet(data: any): XLSX.WorkSheet {
   rows.push([])
   rows.push(['INVOICE'])
   rows.push([])
-  rows.push(['Bill To:', d.buyerName || '', '', 'Date:', d.date || ''])
+  rows.push(['To:', d.buyerName || '', '', 'Date:', d.date || ''])
   rows.push([d.buyerAddress || '', '', '', 'Invoice No:', d.invoiceNo || ''])
   rows.push(['', '', '', 'Contract No:', d.piNo || ''])
   rows.push([])
-  rows.push(['Payment term:', d.terms || '', '', 'From:', 'China'])
-  rows.push(['', '', '', 'To:', d.destinationCountry || ''])
+  rows.push(['Payment term:', d.terms || '', '', 'From:', '中国'])
+  rows.push(['', '', '', 'to:', d.destinationCountry || ''])
   rows.push([])
 
   // Table header
   rows.push([
-    'NO.',
     'CODE NO.',
     'DESCRIPTION',
     'QTY.',
@@ -55,13 +54,12 @@ function buildCommercialInvoiceSheet(data: any): XLSX.WorkSheet {
 
   // Items
   let total = 0
-  items.forEach((item: any, idx: number) => {
+  items.forEach((item: any) => {
     const amt = (item.unitPrice || 0) * (item.quantity || 0)
     total += amt
     rows.push([
-      idx + 1,
-      item.hsCode || '',
-      `${item.nameCN || ''} / ${item.nameEN || ''}`,
+      '无型号',
+      item.nameCN || '',
       item.quantity || 0,
       item.unitPrice || 0,
       amt,
@@ -69,14 +67,15 @@ function buildCommercialInvoiceSheet(data: any): XLSX.WorkSheet {
   })
 
   // Total row
-  rows.push(['', '', '', '', 'TOTAL:', total])
+  rows.push(['', '', '', 'TOTAL:', total])
+  rows.push([])
+  rows.push(['Guangzhou Jingtu Technology Co., Ltd.'])
   rows.push([])
   rows.push(['仅供报关使用'])
 
   const ws = XLSX.utils.aoa_to_sheet(rows)
   // Set column widths
   ws['!cols'] = [
-    { wch: 6 },
     { wch: 14 },
     { wch: 45 },
     { wch: 10 },
@@ -94,68 +93,80 @@ function buildPurchaseContractSheet(data: any): XLSX.WorkSheet {
 
   rows.push(['订购合同 / PURCHASE CONTRACT'])
   rows.push([])
-  rows.push(['卖方(Seller):', '广州鲸途科技有限公司 / Guangzhou Jingtu Technology Co., Ltd.'])
-  rows.push(['地址(Address):', '广州市黄埔区东众路42号B3栋1506单元'])
-  rows.push(['协议号(Contract No.):', d.piNo || '', '', '日期(Date):', d.date || ''])
-  rows.push(['签订地点(Signed at):', 'Guangzhou'])
+  rows.push(['卖方: 广州鲸途科技有限公司'])
+  rows.push(['THE SELLERS: Guangzhou Jingtu Technology Co., Ltd.'])
+  rows.push(['广州市黄埔区东众路42号B3栋1506单元'])
+  rows.push(['Unit 1506, Building B3, No. 42 Dongzhong Road, Huangpu District, Guangzhou'])
+  rows.push(['Phone: 8613268212381'])
   rows.push([])
-  rows.push(['买方(Buyer):', d.buyerName || ''])
-  rows.push(['地址(Address):', d.buyerAddress || ''])
+  rows.push(['买方:', d.buyerName || ''])
+  rows.push(['THE BUYER:', d.buyerName || ''])
+  rows.push([])
+  rows.push(['协议号:', d.piNo || '', '', '日期:', d.date || ''])
+  rows.push(['地点:', 'GUANGZHOU,CHINA'])
   rows.push([])
 
-  // Contract clauses
-  rows.push(['经买卖双方确认同意，达成如下条款：'])
-  rows.push(['1. 品名及规格(Name of Commodity & Specification)、数量(Quantity)、金额(Amount)如下：'])
+  // Contract clauses intro
+  rows.push(['兹经买卖双方同意按照以下的条款由买方购进卖方售出以下商品：'])
+  rows.push(['This contract is made by and between the Buyer and the Sellers:whereby the Buyers agree to buy and the Sellers agree to sell the under-mentioned goods subject to the terms and conditions as stipulated hereinafter:'])
+  rows.push([])
+  rows.push(['(1)商品名称及规格(Name of commodity and Specification):'])
   rows.push([])
 
   // Product table header
   rows.push([
-    '序号',
-    '商品名称',
-    '英文名称',
-    '数量',
-    '单价(USD)',
-    '金额(USD)',
+    'CODE NO.',
+    'DESCRIPTION',
+    'QTY.',
+    'UNIT PRC(USD)',
+    'AMT.(USD)',
   ])
 
   let total = 0
-  items.forEach((item: any, idx: number) => {
+  items.forEach((item: any) => {
     const amt = (item.unitPrice || 0) * (item.quantity || 0)
     total += amt
     rows.push([
-      idx + 1,
+      '无型号',
       item.nameCN || '',
-      item.nameEN || '',
       item.quantity || 0,
       item.unitPrice || 0,
       amt,
     ])
   })
 
-  rows.push(['', '', '', '', 'TOTAL:', total])
+  rows.push(['', '', '', 'TOTAL:', total])
   rows.push([])
 
   // Clauses
-  rows.push(['2. 质量要求(Marking): 详见上述表格中的规格型号栏'])
-  rows.push(['3. 包装要求(Packing): IN STANDARD EXPORT PACKING'])
-  rows.push(['4. 唛头要求(Marking): N/M'])
-  rows.push(['5. 交货时间(Time of Delivery): 收到订单后30天内'])
-  rows.push(['6. 交货地点(Port of Delivery): Guangzhou'])
-  rows.push(['7. 运输方式(Means of Transportation): 航空运输'])
-  rows.push(['8. 付款条件(Payment): EXW'])
-  rows.push(['9. 保险(Insurance): 由买方承担'])
-  rows.push(['10. 检验标准(Inspection): 以出厂检验为准'])
-  rows.push(['11. 异议与索赔(Discrepancy and Claim): 货到后30天内可提出异议'])
-  rows.push(['12. 不可抗力(Force Majeure): 因不可抗力导致延期交货，卖方不承担责任'])
-  rows.push(['13. 争议解决方式(Arbitration): 协商解决，协商不成提交中国国际经济贸易仲裁委员会仲裁'])
-  rows.push(['14. 其他(Others): 本合同一式两份，买卖双方各执一份，具有同等法律效力'])
+  const totalQty = items.reduce((s, i) => s + (i.quantity || 0), 0)
+  rows.push(['(2)数量(Quantity): ' + totalQty + 'PCS'])
+  rows.push(['(3)价格条件(Price condition): ' + (d.terms || '')])
+  rows.push(['(4)总值(Total Value): USD' + total])
+  rows.push(['(5)包装(Packing): IN STANDARD EXPORT PACKING'])
+  rows.push(['(6)生产国家及制造厂商(Country of Origin & Manufacturer): 中国'])
+  rows.push(['(7)付款条件(Terms of Payment): T/T'])
+  rows.push(['(8)保险(Insurance): 由交易条件的责任方去购买保险'])
+  rows.push(['(9)装运时间(Time of Shipment): BEFORE ' + (d.date || '')])
+  rows.push(['(10)装运口岸(Port of Loading):'])
+  rows.push(['(11)目的口岸(Port of Destination): ' + (d.destinationCountry || '')])
+  rows.push(['(12)装运唛头[Shipping Mark(s)]: BY SELLER\'S OPTION'])
   rows.push([])
-  rows.push(['买方签章/Buyer Signature:', '', '卖方签章/Seller Signature:'])
+  rows.push(['件货物上应刷明到货口岸、件号、每件毛重及净重、尺码及上列唛头（如系危险及/或有毒货物，应按惯例在每件货物上明显刷出有关标记及性质说明）。'])
+  rows.push(['On each package shall be stencilled conspicuously: port of destination,package number,gross and net weights,measurement and the shipping mark shown on the above(For dangerous and/or poisonous cargo,'])
+  rows.push(['the name and the generally adopted symbol shall be marked conspicuously on each package)'])
   rows.push([])
-  rows.push(['仅供报关使用'])
+  rows.push(['(13)其他条款: (a)本合同其他有关事项（第14款即附加条款除外，）均按交货条款之规定办理，该交货条款为本合同之不可分割部分。 (b) 本合同以中文及英文两种文字说明，两种文字的条款具有同等效力'])
+  rows.push(['Other terms:(a) Other matters (excepting Clause 14 viz. Supplementary Condition) relating to this Contract shall be dealt with in accordance with the Terms of Delivery as specified overleaf, which shall form an integral part of this Contract.(b) This Contract is made out in Chinese and English, both versions being equally authentic.'])
+  rows.push([])
+  rows.push(['(14)附加条款（本合同其他任何条款如与本附加条款有抵触时，以本附加条款为准双方都认可的有关电传、电报等书面材料也可构成本条款的一部分。）'])
+  rows.push(['Supplementary Condition(s) (Should any other clause in this Contract be in connice with the following Supplementary Condition(s),the Supplementary Condition (s) should be taken as final and binding.,Fax, cable and other papers, to which both parties agreed, will constitute part of this clause.):'])
+  rows.push([])
+  rows.push(['买方/Buyer', '', '卖方/Seller'])
+  rows.push(['THE BUYERS', '', 'THE SELLERS'])
 
   const ws = XLSX.utils.aoa_to_sheet(rows)
-  ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 25 }, { wch: 12 }, { wch: 14 }, { wch: 14 }]
+  ws['!cols'] = [{ wch: 14 }, { wch: 40 }, { wch: 12 }, { wch: 16 }, { wch: 16 }]
   return ws
 }
 
@@ -171,19 +182,19 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
   rows.push([])
   rows.push(['装箱单 / PACKING LIST'])
   rows.push([])
-  rows.push(['Invoice No:', d.invoiceNo || '', '', 'Date:', d.date || ''])
-  rows.push(['Contract No:', d.piNo || '', '', 'Page:', '1 of 1'])
+  rows.push(['Invoice No.', d.invoiceNo || '', '', 'Date:', d.date || ''])
+  rows.push(['Contract No.', d.piNo || '', '', 'Page:', ''])
   rows.push([])
 
   // Table header
   rows.push([
-    'NO.',
+    'CODE NO',
     'Description',
     'Quantity(PCS)',
-    'Package',
+    'Inner Package',
     'Gross Weight(KGS)',
     'Net Weight(KGS)',
-    'Measurement(m³)',
+    'Measurement(m3)',
   ])
 
   if (cartons.length > 0) {
@@ -203,8 +214,8 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
         if (isFirst) totalGross += carton.grossWeightKg || 0
 
         rows.push([
-          globalIdx,
-          `${item.nameCN || ''} / ${item.nameEN || ''}`,
+          '无型号',
+          item.nameCN || '',
           qty,
           isFirst ? '1 carton' : '',
           isFirst ? (carton.grossWeightKg || 0).toFixed(1) : '',
@@ -216,9 +227,9 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
 
     rows.push([
       '',
-      'TOTAL',
+      'TOTAL:',
       totalQty,
-      `${cartons.length} cartons`,
+      `${cartons.length} carton`,
       `${totalGross.toFixed(1)} KGS`,
       `${totalNet.toFixed(2)} KGS`,
       `${(d.totalCartonVolume || 0).toFixed(2)} m³`,
@@ -228,7 +239,7 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
     let totalGross = 0
     let totalNet = 0
 
-    items.forEach((item: any, idx: number) => {
+    items.forEach((item: any) => {
       const qty = item.quantity || 0
       const gross = (item.weightKg || 0) * qty
       const net = (item.netWeightKg || 0) * qty
@@ -236,8 +247,8 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
       totalGross += gross
       totalNet += net
       rows.push([
-        idx + 1,
-        `${item.nameCN || ''} / ${item.nameEN || ''}`,
+        '无型号',
+        item.nameCN || '',
         qty,
         'Carton',
         gross.toFixed(2),
@@ -246,14 +257,14 @@ function buildPackingListSheet(data: any): XLSX.WorkSheet {
       ])
     })
 
-    rows.push(['', 'TOTAL', totalQty, '', totalGross.toFixed(2), totalNet.toFixed(2), ''])
+    rows.push(['', 'TOTAL:', totalQty, '', totalGross.toFixed(2), totalNet.toFixed(2), ''])
   }
 
   rows.push([])
-  rows.push(['仅供报关使用'])
+  rows.push(['Guangzhou Jingtu Technology Co., Ltd.'])
 
   const ws = XLSX.utils.aoa_to_sheet(rows)
-  ws['!cols'] = [{ wch: 6 }, { wch: 40 }, { wch: 14 }, { wch: 12 }, { wch: 18 }, { wch: 16 }, { wch: 16 }]
+  ws['!cols'] = [{ wch: 14 }, { wch: 40 }, { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 16 }, { wch: 16 }]
   return ws
 }
 
@@ -271,7 +282,7 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
   rows.push(['出境关别:', '', '出口日期:', '', '申报日期:', ''])
   rows.push([])
   rows.push(['境外收货人:', d.buyerName || ''])
-  rows.push(['运输方式:', d.transportMode || '航空运输'])
+  rows.push(['首段运输方式:', d.transportMode || '航空运输'])
   rows.push(['提运单号:', ''])
   rows.push([])
   rows.push(['生产销售单位:', d.sellerName || '广州鲸途科技有限公司'])
@@ -286,6 +297,7 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
   rows.push(['毛重(千克):', d.grossTotal || 0])
   rows.push(['净重(千克):', d.netTotal || 0])
   rows.push(['成交方式:', d.terms || ''])
+  rows.push(['人民币报关金额:', d.customsDeclarationAmountCNY || ''])
   rows.push([])
 
   // Items table
@@ -293,8 +305,10 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
     '项号',
     '商品编号',
     '商品名称',
-    '规格型号',
-    '数量及单位',
+    '申报要素',
+    '数量',
+    '单位',
+    '千克',
     '单价',
     '总价',
     '币制',
@@ -310,7 +324,9 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
       item.hsCode || '',
       item.nameCN || '',
       item.declarationElements || '',
-      `${item.totalQty || 0}个`,
+      item.totalQty || 0,
+      '个',
+      item.netWeightKg || 0,
       item.unitPrice || 0,
       item.totalPrice || 0,
       d.currency || 'USD',
@@ -322,9 +338,11 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
   })
 
   rows.push([])
-  rows.push(['申报单位签章:', '', '海关审单批注及放行日期:'])
+  rows.push(['特殊关系确认: 否', '', '价格影响确认: 否', '', '支持特许权使用费确认: 否', '', '自报自缴: 是'])
   rows.push([])
-  rows.push(['仅供报关使用'])
+  rows.push(['报关人员', '', '报关人员证号', '', '电话', '', '兹申明对以上内容承担如实申报、依法纳税之', '', '海关批注及签章'])
+  rows.push([])
+  rows.push(['申报单位', '', '', '', '', '', '申报单位(签'])
 
   const ws = XLSX.utils.aoa_to_sheet(rows)
   ws['!cols'] = [
@@ -332,7 +350,9 @@ function buildCustomsDeclarationSheet(data: any): XLSX.WorkSheet {
     { wch: 12 },
     { wch: 28 },
     { wch: 30 },
-    { wch: 14 },
+    { wch: 10 },
+    { wch: 8 },
+    { wch: 10 },
     { wch: 12 },
     { wch: 12 },
     { wch: 8 },
