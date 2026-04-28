@@ -15,6 +15,7 @@ interface DocumentStore {
   setGenerationStatus: (type: DocumentType, status: GenerationStatus) => void
   selectAll: () => void
   deselectAll: () => void
+  reset: () => void
 }
 
 const ALL_DOCS: DocumentType[] = [
@@ -52,4 +53,6 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
 
   selectAll: () => set({ selectedDocuments: [...ALL_DOCS] }),
   deselectAll: () => set({ selectedDocuments: [] }),
+
+  reset: () => set({ selectedDocuments: [...ALL_DOCS], previewMode: 'full', generationStatus: { ...defaultStatus } }),
 }))

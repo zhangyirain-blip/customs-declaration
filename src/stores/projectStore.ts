@@ -79,6 +79,7 @@ interface ProjectStore {
   advanceStatus: (status: WorkflowStatus) => Promise<void>
   deleteProject: (id: string) => Promise<void>
   getCurrentProject: () => ProjectRecord | undefined
+  clearCurrentProject: () => void
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -173,6 +174,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
   advanceStatus: async (status) => {
     await get().updateCurrentProject({ status })
+  },
+
+  clearCurrentProject: () => {
+    set({ currentProjectId: null })
   },
 
   deleteProject: async (id) => {

@@ -20,6 +20,7 @@ import { usePriceStore } from '@/stores/priceStore'
 import { useHistoryStore } from '@/stores/historyStore'
 import { generateInvoiceNo } from '@/utils/documentUtils'
 import { exportDocument, exportCombinedWorkbook } from '@/utils/exportUtils'
+import { resetWorkflow } from '@/utils/workflowReset'
 import Stepper from '@/components/Stepper'
 
 type DocTab = 'commercial_invoice' | 'purchase_contract' | 'packing_list' | 'customs_declaration'
@@ -1058,7 +1059,10 @@ export default function DocPreview() {
           上一步
         </button>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => {
+            resetWorkflow()
+            navigate('/')
+          }}
           className="jt-btn-primary flex items-center gap-2"
         >
           <Home size={16} />

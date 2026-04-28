@@ -11,6 +11,7 @@ interface PriceStore {
   setComponentPrices: (prices: Record<string, number>) => void
   autoDistribute: (totalAmount?: number) => void
   checkBalance: () => boolean
+  reset: () => void
 }
 
 const COMPONENT_IDS = defaultComponents.map((c) => c.id)
@@ -96,5 +97,9 @@ export const usePriceStore = create<PriceStore>((set, get) => ({
     const balanced = Math.abs(sum - state.totalAmount) < 0.01
     set({ isBalanced: balanced })
     return balanced
+  },
+
+  reset: () => {
+    set({ totalAmount: 0, componentPrices: {}, manualAdjustments: {}, isBalanced: true })
   },
 }))

@@ -18,6 +18,7 @@ import { usePIStore } from '@/stores/piStore'
 import { usePriceStore } from '@/stores/priceStore'
 import { parsePIWithLLM } from '@/services/llmParser'
 import { pluginRegistry } from '@/plugins/registry'
+import { resetWorkflow } from '@/utils/workflowReset'
 
 const pageVariants = {
   hidden: { opacity: 0, y: 8 },
@@ -779,7 +780,7 @@ export default function PIUpload() {
       {/* Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 lg:left-[260px] bg-white border-t border-[#E2E5E9] px-6 py-4 z-30 shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
         <div className="max-w-[800px] mx-auto flex items-center justify-between">
-          <button onClick={() => navigate('/')} className="jt-btn-ghost flex items-center gap-2 text-[#5A6270]"><ArrowRight size={16} className="rotate-180" />工作台</button>
+          <button onClick={() => { resetWorkflow(); navigate('/') }} className="jt-btn-ghost flex items-center gap-2 text-[#5A6270]"><ArrowRight size={16} className="rotate-180" />工作台</button>
           <div className="flex items-center gap-3">
             <button onClick={handleSave} className="jt-btn-secondary flex items-center gap-2" disabled={!showForm}><Save size={16} />保存草稿</button>
             <button onClick={handleNext} disabled={!showForm} className="jt-btn-primary flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">确认并下一步<ArrowRight size={16} /></button>
