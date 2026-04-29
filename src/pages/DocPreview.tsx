@@ -228,7 +228,6 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
       <div className="text-center mb-6">
         <h2 className="text-base font-bold">{data.sellerNameEN}</h2>
         <p className="text-xs text-[#5A6270] mt-1">{data.sellerAddressEN}</p>
-        <p className="text-xs text-[#5A6270]">Tel: {data.sellerPhone}</p>
       </div>
 
       {/* Title */}
@@ -237,7 +236,7 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
       {/* Info Grid */}
       <div className="flex justify-between mb-6 text-sm">
         <div>
-          <p className="font-semibold mb-1">Bill To:</p>
+          <p className="font-semibold mb-1">To:</p>
           <p>{data.buyerName}</p>
           <p className="text-[#5A6270]">{data.buyerAddress}</p>
         </div>
@@ -264,8 +263,8 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
           <span className="font-medium">{data.terms}</span>
         </p>
         <p>
-          <span className="text-[#5A6270]">From: </span>China
-          <span className="text-[#5A6270] ml-4">To: </span>
+          <span className="text-[#5A6270]">From: </span>中国
+          <span className="text-[#5A6270] ml-4">to: </span>
           {data.destinationCountry}
         </p>
       </div>
@@ -274,7 +273,6 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
       <table className="w-full text-sm border border-black border-collapse mb-6">
         <thead>
           <tr className="bg-[#F8F9FB]">
-            <th className="border border-black px-2 py-2 text-left w-10">NO.</th>
             <th className="border border-black px-2 py-2 text-left">CODE NO.</th>
             <th className="border border-black px-2 py-2 text-left">DESCRIPTION</th>
             <th className="border border-black px-2 py-2 text-center w-16">QTY.</th>
@@ -283,15 +281,10 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
           </tr>
         </thead>
         <tbody>
-          {data.items.map((item, idx) => (
+          {data.items.map((item) => (
             <tr key={item.id}>
-              <td className="border border-black px-2 py-1.5 text-center">{idx + 1}</td>
-              <td className="border border-black px-2 py-1.5 font-mono text-xs">{item.hsCode}</td>
-              <td className="border border-black px-2 py-1.5">
-                {item.nameEN}
-                <br />
-                <span className="text-xs text-[#5A6270]">{item.nameCN}</span>
-              </td>
+              <td className="border border-black px-2 py-1.5 text-center">无型号</td>
+              <td className="border border-black px-2 py-1.5">{item.nameCN}</td>
               <td className="border border-black px-2 py-1.5 text-center">{item.totalQty}</td>
               <td className="border border-black px-2 py-1.5 text-right font-mono">
                 {item.unitPrice.toFixed(2)}
@@ -302,7 +295,7 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
             </tr>
           ))}
           <tr className="font-bold">
-            <td colSpan={5} className="border border-black px-2 py-2 text-right">
+            <td colSpan={4} className="border border-black px-2 py-2 text-right">
               TOTAL:
             </td>
             <td className="border border-black px-2 py-2 text-right font-mono">
@@ -313,12 +306,9 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
       </table>
 
       {/* Footer */}
-      <div className="flex justify-between items-end mt-12 text-sm">
-        <p className="text-[#5A6270] italic">仅供报关使用</p>
-        <div className="text-center">
-          <p className="font-semibold">{data.sellerNameEN}</p>
-          <div className="w-32 h-12 border-b border-[#1A1D23] mt-2" />
-        </div>
+      <div className="text-center mt-12 text-sm">
+        <p className="font-semibold">{data.sellerNameEN}</p>
+        <p className="text-[#5A6270] italic mt-4">仅供报关使用</p>
       </div>
     </div>
   )
@@ -330,63 +320,56 @@ function CommercialInvoicePreview({ data }: { data: ReturnType<typeof useDocData
 function PurchaseContractPreview({ data }: { data: ReturnType<typeof useDocData> }) {
   return (
     <div className="bg-white p-8 min-h-[800px] text-[#1A1D23]">
-      <h1 className="text-center text-xl font-bold mb-6">订购合同 / PURCHASE CONTRACT</h1>
+      <h1 className="text-center text-xl font-bold">订 购 合 同</h1>
+      <h2 className="text-center text-lg font-bold mb-6">PURCHASE CONTRACT</h2>
 
-      {/* Seller / Buyer Info */}
-      <div className="grid grid-cols-2 gap-6 text-sm mb-6">
+      {/* Seller / Contract Info */}
+      <div className="flex justify-between text-sm mb-2">
         <div className="space-y-1">
-          <p>
-            <span className="text-[#5A6270]">卖方(Seller): </span>
-            <span className="font-medium">{data.sellerNameCN}</span>
-          </p>
-          <p className="text-xs text-[#5A6270]">{data.sellerNameEN}</p>
-          <p className="text-[#5A6270]">地址: {data.sellerAddress}</p>
-          <p>
-            <span className="text-[#5A6270]">协议号: </span>
-            <span className="font-mono">{data.piNo}</span>
-          </p>
-          <p>
-            <span className="text-[#5A6270]">签订地点: </span>Guangzhou
-          </p>
+          <p><span className="font-medium">卖方: {data.sellerNameCN}</span></p>
+          <p className="text-xs">THE SELLERS: {data.sellerNameEN}</p>
+          <p className="text-xs">{data.sellerAddress}</p>
+          <p className="text-xs">Unit 1506, Building B3, No. 42 Dongzhong Road, Huangpu District, Guangzhou</p>
         </div>
-        <div className="space-y-1">
-          <p>
-            <span className="text-[#5A6270]">买方(Buyer): </span>
-            <span className="font-medium">{data.buyerName}</span>
-          </p>
-          <p className="text-[#5A6270]">地址: {data.buyerAddress || '—'}</p>
-          <p>
-            <span className="text-[#5A6270]">日期: </span>
-            {data.date}
-          </p>
+        <div className="space-y-1 text-right">
+          <p><span className="text-[#5A6270]">协议号: </span><span className="font-mono">{data.piNo}</span></p>
+          <p><span className="text-[#5A6270]">日期: </span>{data.date}</p>
+          <p><span className="text-[#5A6270]">地点: </span>GUANGZHOU,CHINA</p>
         </div>
       </div>
 
-      <p className="text-sm mb-4">
-        经买卖双方确认同意，达成如下条款：
+      {/* Buyer */}
+      <div className="text-sm mb-6 space-y-1">
+        <p><span className="font-medium">买方: {data.buyerName}</span></p>
+        <p className="text-xs">THE BUYER: {data.buyerName}</p>
+      </div>
+
+      <p className="text-sm mb-2">
+        兹经买卖双方同意按照以下的条款由买方购进卖方售出以下商品：
+      </p>
+      <p className="text-sm text-[#5A6270] mb-2">
+        This contract is made by and between the Buyer and the Sellers:whereby the Buyers agree to buy and the Sellers agree to sell the under-mentioned goods subject to the terms and conditions as stipulated hereinafter:
       </p>
       <p className="text-sm font-medium mb-2">
-        1. 品名及规格(Name of Commodity & Specification)、数量(Quantity)、金额(Amount)如下：
+        (1)商品名称及规格(Name of commodity and Specification):
       </p>
 
       {/* Product Table */}
       <table className="w-full text-sm border border-black border-collapse mb-4">
         <thead>
           <tr className="bg-[#F8F9FB]">
-            <th className="border border-black px-2 py-2 w-10">序号</th>
-            <th className="border border-black px-2 py-2">商品名称</th>
-            <th className="border border-black px-2 py-2">英文名称</th>
-            <th className="border border-black px-2 py-2 w-16">数量</th>
-            <th className="border border-black px-2 py-2 w-20">单价(USD)</th>
-            <th className="border border-black px-2 py-2 w-20">金额(USD)</th>
+            <th className="border border-black px-2 py-2">CODE NO.</th>
+            <th className="border border-black px-2 py-2">DESCRIPTION</th>
+            <th className="border border-black px-2 py-2 w-16">QTY.</th>
+            <th className="border border-black px-2 py-2 w-20">UNIT PRC(USD)</th>
+            <th className="border border-black px-2 py-2 w-20">AMT.(USD)</th>
           </tr>
         </thead>
         <tbody>
-          {data.items.map((item, idx) => (
+          {data.items.map((item) => (
             <tr key={item.id}>
-              <td className="border border-black px-2 py-1.5 text-center">{idx + 1}</td>
+              <td className="border border-black px-2 py-1.5 text-center">无型号</td>
               <td className="border border-black px-2 py-1.5">{item.nameCN}</td>
-              <td className="border border-black px-2 py-1.5 text-xs">{item.nameEN}</td>
               <td className="border border-black px-2 py-1.5 text-center">{item.totalQty}</td>
               <td className="border border-black px-2 py-1.5 text-right font-mono">
                 {item.unitPrice.toFixed(2)}
@@ -397,7 +380,7 @@ function PurchaseContractPreview({ data }: { data: ReturnType<typeof useDocData>
             </tr>
           ))}
           <tr className="font-bold">
-            <td colSpan={5} className="border border-black px-2 py-2 text-right">TOTAL:</td>
+            <td colSpan={4} className="border border-black px-2 py-2 text-right">TOTAL:</td>
             <td className="border border-black px-2 py-2 text-right font-mono">
               {data.totalAmount.toFixed(2)}
             </td>
@@ -406,38 +389,47 @@ function PurchaseContractPreview({ data }: { data: ReturnType<typeof useDocData>
       </table>
 
       {/* Clauses */}
-      <div className="space-y-1 text-xs text-[#5A6270] mb-8">
-        <p>2. 质量要求(Marking): 详见上述表格中的规格型号栏</p>
-        <p>3. 包装要求(Packing): IN STANDARD EXPORT PACKING</p>
-        <p>4. 唛头要求(Marking): N/M</p>
-        <p>5. 交货时间(Time of Delivery): 收到订单后30天内</p>
-        <p>6. 交货地点(Port of Delivery): Guangzhou</p>
-        <p>7. 运输方式(Means of Transportation): {data.transportMode}</p>
-        <p>8. 付款条件(Payment): {data.terms}</p>
-        <p>9. 保险(Insurance): 由买方承担</p>
-        <p>10. 检验标准(Inspection): 以出厂检验为准</p>
-        <p>11. 异议与索赔(Discrepancy and Claim): 货到后30天内可提出异议</p>
-        <p>12. 不可抗力(Force Majeure): 因不可抗力导致延期交货，卖方不承担责任</p>
-        <p>
-          13. 争议解决方式(Arbitration):
-          协商解决，协商不成提交中国国际经济贸易仲裁委员会仲裁
-        </p>
-        <p>14. 其他(Others): 本合同一式两份，买卖双方各执一份，具有同等法律效力</p>
+      <div className="space-y-1 text-xs mb-8">
+        <p>(2)数量(Quantity): {data.items.reduce((s, i) => s + i.totalQty, 0)}PCS</p>
+        <p>(3)价格条件(Price condition): {data.terms}</p>
+        <p>(4)总值(Total Value): USD{data.totalAmount.toFixed(2)}</p>
+        <p>(5)包装(Packing): IN STANDARD EXPORT PACKING</p>
+        <p>(6)生产国家及制造厂商(Country of Origin & Manufacturer): 中国</p>
+        <p>(7)付款条件(Terms of Payment): T/T</p>
+        <p>(8)保险(Insurance): 由交易条件的责任方去购买保险</p>
+        <p>(9)装运时间(Time of Shipment): BEFORE {data.date}</p>
+        <p>(10)装运口岸(Port of Loading): </p>
+        <p>(11)目的口岸(Port of Destination): {data.destinationCountry}</p>
+        <p>(12)装运唛头[Shipping Mark(s)]: BY SELLER&apos;S OPTION</p>
+      </div>
+
+      <p className="text-xs text-[#5A6270] mb-2">
+        件货物上应刷明到货口岸、件号、每件毛重及净重、尺码及上列唛头（如系危险及/或有毒货物，应按惯例在每件货物上明显刷出有关标记及性质说明）。
+      </p>
+      <p className="text-xs text-[#5A6270] mb-4">
+        On each package shall be stencilled conspicuously: port of destination,package number,gross and net weights,measurement and the shipping mark shown on the above(For dangerous and/or poisonous cargo,the name and the generally adopted symbol shall be marked conspicuously on each package)
+      </p>
+
+      <div className="space-y-1 text-xs mb-8">
+        <p>(13)其他条款: (a)本合同其他有关事项（第14款即附加条款除外，）均按交货条款之规定办理，该交货条款为本合同之不可分割部分。 (b) 本合同以中文及英文两种文字说明，两种文字的条款具有同等效力</p>
+        <p className="text-[#5A6270]">Other terms:(a) Other matters (excepting Clause 14 viz. Supplementary Condition) relating to this Contract shall be dealt with in accordance with the Terms of Delivery as specified overleaf, which shall form an integral part of this Contract.(b) This Contract is made out in Chinese and English, both versions being equally authentic.</p>
+        <p className="mt-2">(14)附加条款（本合同其他任何条款如与本附加条款有抵触时，以本附加条款为准双方都认可的有关电传、电报等书面材料也可构成本条款的一部分。）</p>
+        <p className="text-[#5A6270]">Supplementary Condition(s) (Should any other clause in this Contract be in connice with the following Supplementary Condition(s),the Supplementary Condition (s) should be taken as final and binding.,Fax, cable and other papers, to which both parties agreed, will constitute part of this clause.):</p>
       </div>
 
       {/* Signatures */}
       <div className="grid grid-cols-2 gap-12 mt-8 text-sm">
         <div>
-          <p className="font-medium mb-4">买方签章 / Buyer Signature:</p>
+          <p className="font-medium mb-1">买方/Buyer</p>
+          <p className="text-xs text-[#5A6270] mb-4">THE BUYERS</p>
           <div className="w-40 h-16 border-b border-[#1A1D23]" />
         </div>
         <div>
-          <p className="font-medium mb-4">卖方签章 / Seller Signature:</p>
+          <p className="font-medium mb-1">卖方/Seller</p>
+          <p className="text-xs text-[#5A6270] mb-4">THE SELLERS</p>
           <div className="w-40 h-16 border-b border-[#1A1D23]" />
         </div>
       </div>
-
-      <p className="text-center text-xs text-[#5A6270] italic mt-8">仅供报关使用</p>
     </div>
   )
 }

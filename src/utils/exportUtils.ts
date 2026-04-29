@@ -31,7 +31,6 @@ function buildCommercialInvoiceSheet(data: any): XLSX.WorkSheet {
   // Header
   rows.push(['广州鲸途科技有限公司 / Guangzhou Jingtu Technology Co., Ltd.'])
   rows.push(['广州市黄埔区东众路42号B3栋1506单元 / Unit 1506, Building B3, No. 42 Dongzhong Road, Huangpu District, Guangzhou'])
-  rows.push(['电话: 8613268212381'])
   rows.push([])
   rows.push(['INVOICE'])
   rows.push([])
@@ -91,19 +90,16 @@ function buildPurchaseContractSheet(data: any): XLSX.WorkSheet {
   const items: any[] = d.items || []
   const rows: (string | number)[][] = []
 
-  rows.push(['订购合同 / PURCHASE CONTRACT'])
+  rows.push(['订 购 合 同'])
+  rows.push(['PURCHASE CONTRACT'])
   rows.push([])
-  rows.push(['卖方: 广州鲸途科技有限公司'])
-  rows.push(['THE SELLERS: Guangzhou Jingtu Technology Co., Ltd.'])
-  rows.push(['广州市黄埔区东众路42号B3栋1506单元'])
+  rows.push(['卖方: 广州鲸途科技有限公司', '', '', '协议号:', d.piNo || ''])
+  rows.push(['THE SELLERS: Guangzhou Jingtu Technology Co., Ltd.', '', '', '日期:', d.date || ''])
+  rows.push(['广州市黄埔区东众路42号B3栋1506单元', '', '', '地点:', 'GUANGZHOU,CHINA'])
   rows.push(['Unit 1506, Building B3, No. 42 Dongzhong Road, Huangpu District, Guangzhou'])
-  rows.push(['Phone: 8613268212381'])
   rows.push([])
   rows.push(['买方:', d.buyerName || ''])
   rows.push(['THE BUYER:', d.buyerName || ''])
-  rows.push([])
-  rows.push(['协议号:', d.piNo || '', '', '日期:', d.date || ''])
-  rows.push(['地点:', 'GUANGZHOU,CHINA'])
   rows.push([])
 
   // Contract clauses intro
